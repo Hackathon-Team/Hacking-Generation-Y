@@ -77,6 +77,12 @@ public class LiveCardMenuActivity extends Activity {
         // Nothing else to do, finish the Activity.
         finish();
     }
+
+    @Override
+    protected void onResume() {
+        while(true) {}
+
+    }
 }
 
 
