@@ -43,8 +43,8 @@ public class LiveCardRenderer implements DirectRenderingCallback {
     private int mCenterX;
     private int mCenterY;
 
-    private SurfaceHolder mHolder;
     private boolean mRenderingPaused;
+    private SurfaceHolder mHolder;
     private OrientationManager orientationManager;
 
     private RenderThread mRenderThread;
@@ -135,6 +135,26 @@ public class LiveCardRenderer implements DirectRenderingCallback {
         }
     }
 
+    private void draw() {
+        Canvas canvas;
+        try {
+            canvas = mHolder.lockCanvas();
+        } catch (Exception e) {
+            return;
+        }
+        if (canvas != null) {
+            // Clear the canvas.
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+            // Update the text alpha and draw the text on the canvas.
+            mPaint.setAlpha((mPaint.getAlpha() + ALPHA_INCREMENT) % MAX_ALPHA);
+            canvas.drawText("This proves dependency on the run method", mCenterX, mCenterY, mPaint);
+
+            // Unlock the canvas and post the updates.
+            mHolder.unlockCanvasAndPost(canvas);
+        }
+    }
+
     /**
      * Redraws the {@link View} in the background.
      */
@@ -169,6 +189,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
             while (shouldRun()) {
                 long frameStart = SystemClock.elapsedRealtime();
                 updateInformation();
+                draw();
                 long frameLength = SystemClock.elapsedRealtime() - frameStart;
 
                 long sleepTime = FRAME_TIME_MILLIS - frameLength;
@@ -178,6 +199,4 @@ public class LiveCardRenderer implements DirectRenderingCallback {
             }
         }
     }
-
 }
-
