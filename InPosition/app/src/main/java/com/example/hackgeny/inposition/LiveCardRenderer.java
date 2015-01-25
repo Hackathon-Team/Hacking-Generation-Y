@@ -22,34 +22,34 @@ public class LiveCardRenderer implements DirectRenderingCallback {
     private static final String TAG = LiveCardRenderer.class.getSimpleName();
 
 
-/**
+    /**
      * The refresh rate, in frames per second, of the view
      */
 
     private static final long REFRESH_RATE_FPS= 45;
 
-/**
+    /**
      * The duration, in millisconds, of one frame.
      */
 
     private static final long FRAME_TIME_MILLIS = TimeUnit.SECONDS.toMillis(1) / REFRESH_RATE_FPS;
 
 
-/**
+    /**
      * "Hello world" text size.
      */
 
     private static final float TEXT_SIZE = 70f;
 
 
-/**
+    /**
      * Alpha variation per frame.
      */
 
     private static final int ALPHA_INCREMENT = 5;
 
 
-/**
+    /**
      * Max alpha value.
      */
 
@@ -111,7 +111,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
     }
 
 
-/**
+    /**
      * Starts or stops rendering according to the link card's state.
      */
 
@@ -131,7 +131,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
     }
 
 
-/**
+    /**
      * Draws the view in the SurfaceHolder's canvas.
      */
 
@@ -155,16 +155,16 @@ public class LiveCardRenderer implements DirectRenderingCallback {
         }
     }
 
-    */
-/**
+
+    /**
      * Redraws the {@link View} in the background.
      */
 
     private class RenderThread extends Thread {
         private boolean mShouldRun;
 
-        */
-/**
+
+        /**
          * Initializes the background rendering thread.
          */
 
@@ -173,7 +173,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
         }
 
 
-/**
+        /**
          * Returns true if the rendering thread should continue to run.
          *
          * @return true if the rendering thread should continue to run
