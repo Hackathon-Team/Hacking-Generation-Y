@@ -23,8 +23,7 @@ public class LiveCardMenuActivity extends Activity {
 
         cards = new ArrayList<ExhibitionCard>();
         for(Place place : places) {
-            cards.add(new ExhibitionCard(place.getTitle(), place.getInfo(),
-                    Card.ImageLayout.FULL, new int[]{R.drawable.testimage}));
+            cards.add(new ExhibitionCard(getApplicationContext(), place.getTitle(), null));
         }
 
         cardScroll = new CardScrollView(this);

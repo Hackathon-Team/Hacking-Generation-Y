@@ -35,26 +35,8 @@ public class ExhibitionCardAdapter extends CardScrollAdapter {
 
     @Override public View getView(int position, View convertView, ViewGroup parent) {
 
-        Card card = new Card(context);
-        ExhibitionCard ec = cards.get(position);
+        return cards.get(position).getView();
 
-        if(ec.getTitle() != null) {
-            card.setText(ec.getTitle());
-        }
-
-        if(ec.getInfoText() != null) {
-            card.setFootnote(ec.getInfoText());
-        }
-
-        if(ec.getImage() != null) {
-            card.setImageLayout(ec.getImage());
-        }
-
-        for(int img : ec.getImages()) {
-            card.addImage(img);
-        }
-
-        return card.getView();
     }
 
 }

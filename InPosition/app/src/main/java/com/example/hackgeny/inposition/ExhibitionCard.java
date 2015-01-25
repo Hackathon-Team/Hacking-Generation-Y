@@ -5,9 +5,6 @@ import android.graphics.drawable.Drawable;
 
 import com.google.android.glass.widget.CardBuilder;
 
-/**
- * Created by Abinesh on 1/24/15.
- */
 public class ExhibitionCard extends CardBuilder
 {
     public ExhibitionCard(Context context, String text, Drawable img)
@@ -16,4 +13,5 @@ public class ExhibitionCard extends CardBuilder
         super.setText(text);
         super.addImage(img);
     }
+
 }
