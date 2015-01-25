@@ -1,41 +1,17 @@
 package com.example.hackgeny.inposition;
 
-import com.google.android.glass.app.Card;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 
-/**
- * Created by Abinesh on 1/24/15.
- */
-public class ExhibitionCard
+import com.google.android.glass.widget.CardBuilder;
+
+public class ExhibitionCard extends CardBuilder
 {
-    private String title;
-    private String infoText;
-    private Card.ImageLayout img;
-    private int[] images;
-
-    public ExhibitionCard(String text, String infoText, Card.ImageLayout img, int[] images)
+    public ExhibitionCard(Context context, String text, Drawable img)
     {
-        this.title = text;
-        this.infoText = infoText;
-        this.img = img;
-        this.images = images;
-    }
-    public String getTitle()
-    {
-        return title;
+        super(context, Layout.CAPTION);
+        super.setText(text);
+        super.addImage(img);
     }
 
-    public String getInfoText()
-    {
-        return infoText;
-    }
-
-    public Card.ImageLayout getImage()
-    {
-        return img;
-    }
-
-    public int[] getImages()
-    {
-        return images;
-    }
 }

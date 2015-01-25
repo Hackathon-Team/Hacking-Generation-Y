@@ -8,48 +8,63 @@ import java.util.Collections;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
-import android.util.Log;
 
 public class DataBase {
-    private String[][] dataBase = {
-            {"Alan Turing", "37.484722", "122.203056", "0.0", "Here is a exhibit about Alan Turing. He is credited for creating a machine to win World War II by breaking the Nazi's communication system known as Enigma. All computers were once called Turing machines!"},
-            {"Dinosaur", "37.484722", "122.203056", "0.0", "dinos are scary"},
-            {"Workshop", "37.484722", "122.203056", "0.0", "its a workshop look at coders"},
-            {"Stairway", "37.484722", "122.203056", "10000.0", "hey loook at the stairs"},
-            {"trashcans", "37.484722", "122.203056", "10000.0", "trashcans are overflowing with garbage"}};
-
-//    private Location currLocation = new Location("");
 
     private final int MAX_NUM_CARDS = 3;
-    private final double MAX_DISTANCE = 1000.0; //to qualify as exhibits in the vicinity
-    private final double MAX_RADIUS = 0.00005; //to pop up automatically a place card
+    private final double MAX_DISTANCE = 10.0;
+    private final double MAX_RADIUS = 1.0;
 
     private ArrayList<Place> places;
     private Context context;
 
     public DataBase(Context context) {
+
         places = new ArrayList<Place>();
+        ArrayList<String> fileNames = new ArrayList<String>();
+
+        fileNames.add("Dinosaurs.txt");
+        fileNames.add("Workspace.txt");
+        fileNames.add("Alan Turing.txt");
+
         this.context = context;
-//        currLocation.setAltitude();
-//        currLocation.setLatitude();
-//        currLocation.setLongitude();
-        for(int x = 0; x < dataBase.length; x++) {
-            addPlace(x);
+
+        for(String filename : fileNames) {
+            addPlace(filename);
         }
+
     }
 
-    private void addPlace(int index) {
+    private void addPlace(String filename) {
 
         try {
-            Location location = new Location(LocationManager.GPS_PROVIDER);
-            location.setLatitude(Double.parseDouble(dataBase[index][1]));
-            location.setLatitude(Double.parseDouble(dataBase[index][2]));
-            location.setAltitude(Double.parseDouble(dataBase[index][3]));
-            places.add(new Place(dataBase[index][0], location, dataBase[index][4]));
+
+            InputStream paragraphInfo =  context.getResources().getAssets().open(filename);
+            InputStreamReader inputReader = new InputStreamReader(paragraphInfo);
+            BufferedReader buffReader = new BufferedReader(inputReader);
+
+            String title = buffReader.readLine();
+            double altitude = Double.parseDouble(buffReader.readLine());
+            double latitude = Double.parseDouble(buffReader.readLine());
+            double longitude = Double.parseDouble(buffReader.readLine());
+
+            Location location = new Location("");
+            location.setAltitude(altitude);
+            location.setLatitude(latitude);
+            location.setLongitude(longitude);
+
+            String info1, info = "";
+            while ((info1 = buffReader.readLine()) != null) {
+                    info += info1;
+                    info += " ";
+            }
+
+            places.add(new Place(title, location, info));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public Place findPlace(Location location) {
@@ -78,15 +93,6 @@ public class DataBase {
         }
 
         return closestPlaces;
-    }
-
-    public void toggle() {
-        for(int x = 0; x < 3; x++) {
-            places.get(x).setAltitude(10000.0);
-        }
-        for(int x = 3; x < 5; x++) {
-            places.get(x).setAltitude(0.0);
-        }
     }
 
     private void sort(Location location) {
