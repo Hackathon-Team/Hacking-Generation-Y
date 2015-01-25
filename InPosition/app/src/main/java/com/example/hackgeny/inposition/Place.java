@@ -27,6 +27,10 @@ public class Place implements Comparable<Place> {
         return location;
     }
 
+    public void setAltitude(double altitude) {
+        location.setAltitude(altitude);
+    }
+
     public void calcDistanceToUser(Location location) {
         double x = this.location.getAltitude() - location.getAltitude();
         double y = this.location.getLongitude() - location.getLongitude();
