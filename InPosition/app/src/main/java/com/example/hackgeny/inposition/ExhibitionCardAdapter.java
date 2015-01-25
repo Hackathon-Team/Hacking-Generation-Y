@@ -8,59 +8,53 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-/**
- * Created by Abinesh on 1/24/15.
- */
-public class ExhibitionCardAdapter extends CardScrollAdapter
-{
-    private List<ExhibitionCard> mCards;
+public class ExhibitionCardAdapter extends CardScrollAdapter {
+
+    private List<ExhibitionCard> cards;
     private Context context;
 
-    public ExhibitionCardAdapter(List<ExhibitionCard> cards, Context context)
-    {
-        mCards = cards;
+    public ExhibitionCardAdapter(List<ExhibitionCard> cards, Context context) {
+        this.cards = cards;
         this.context = context;
     }
 
     @Override
-    public int getPosition(Object item)
-    {
-        return mCards.indexOf(item);
+    public int getPosition(Object item) {
+        return cards.indexOf(item);
     }
 
     @Override
-    public int getCount()
-    {
-        return mCards.size();
+    public int getCount() {
+        return cards.size();
     }
 
     @Override
-    public Object getItem(int position)
-    {
-        return mCards.get(position);
+    public Object getItem(int position) {
+        return cards.get(position);
     }
 
-    @Override public View getView(int position, View convertView, ViewGroup parent)
-    {
+    @Override public View getView(int position, View convertView, ViewGroup parent) {
+
         Card card = new Card(context);
-        ExhibitionCard ec = mCards.get(position);
+        ExhibitionCard ec = cards.get(position);
 
-        if(ec.getTitle() != null)
-        {
+        if(ec.getTitle() != null) {
             card.setText(ec.getTitle());
         }
-        if(ec.getInfoText() != null)
-        {
+
+        if(ec.getInfoText() != null) {
             card.setFootnote(ec.getInfoText());
         }
-        if(ec.getImage() != null)
-        {
+
+        if(ec.getImage() != null) {
             card.setImageLayout(ec.getImage());
         }
+
         for(int img : ec.getImages()) {
             card.addImage(img);
         }
 
         return card.getView();
     }
+
 }
