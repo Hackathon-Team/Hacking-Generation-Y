@@ -23,12 +23,14 @@ public class InPosition extends Service {
     private OrientationManager mOrientationManager;
     private LiveCard mLiveCard;
     private LiveCardRenderer mRenderer;
+    private DataBase data;
 
     @Override
     public void onCreate() {
         super.onCreate();
         LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         mOrientationManager = new OrientationManager(locationManager);
+        data=new DataBase(getApplicationContext());
         //mLandmarks = new Landmarks(this)
     }
 
@@ -41,12 +43,12 @@ public class InPosition extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (mLiveCard == null) {
             mLiveCard = new LiveCard(this, LIVE_CARD_TAG);
-            mRenderer = new LiveCardRenderer(this,mOrientationManager);
+            mRenderer = new LiveCardRenderer(this,mOrientationManager,data);
             mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(mRenderer);
             mLiveCard.setVoiceActionEnabled(true);
             // Display the options menu when the live card is tapped.
             Intent menuIntent = new Intent(this, LiveCardMenuActivity.class);
-            menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
             mLiveCard.attach(this);
 
@@ -64,6 +66,7 @@ public class InPosition extends Service {
             mLiveCard = null;
         }
         mOrientationManager = null;
+        data = null;
         super.onDestroy();
     }
 }
