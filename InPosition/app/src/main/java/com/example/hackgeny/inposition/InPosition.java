@@ -5,11 +5,8 @@ import com.google.android.glass.timeline.LiveCard.PublishMode;
 
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.location.Location;
-import android.os.Binder;
 import android.os.IBinder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -20,19 +17,9 @@ import android.location.LocationManager;
 public class InPosition extends Service {
 
     private static final String LIVE_CARD_TAG = "InPosition";
-    private OrientationManager mOrientationManager;
-    private LiveCard mLiveCard;
-    private LiveCardRenderer mRenderer;
-    private DataBase data;
+    //private LiveCardRenderer renderer;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        mOrientationManager = new OrientationManager(locationManager);
-        data=new DataBase(getApplicationContext());
-        //mLandmarks = new Landmarks(this)
-    }
+    private LiveCard mLiveCard;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -43,16 +30,20 @@ public class InPosition extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (mLiveCard == null) {
             mLiveCard = new LiveCard(this, LIVE_CARD_TAG);
-            mRenderer = new LiveCardRenderer(this,mOrientationManager,data);
-            mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(mRenderer);
-            mLiveCard.setVoiceActionEnabled(true);
+
+            //renderer = new LiveCardRenderer(this);
+            //mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(renderer);
+
             // Display the options menu when the live card is tapped.
             Intent menuIntent = new Intent(this, LiveCardMenuActivity.class);
-            menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            menuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
             mLiveCard.attach(this);
 
             mLiveCard.publish((intent == null) ? PublishMode.SILENT : PublishMode.REVEAL);
+
+            startActivity(menuIntent);
+
         } else {
             mLiveCard.navigate();
         }
@@ -65,8 +56,6 @@ public class InPosition extends Service {
             mLiveCard.unpublish();
             mLiveCard = null;
         }
-        mOrientationManager = null;
-        data = null;
         super.onDestroy();
     }
 }
