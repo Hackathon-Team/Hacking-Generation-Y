@@ -1,3 +1,4 @@
+
 package com.example.hackgeny.inposition;
 
 import com.google.android.glass.timeline.DirectRenderingCallback;
@@ -11,40 +12,63 @@ import android.graphics.Typeface;
 import android.os.SystemClock;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.widget.FrameLayout;
 
-/**
- * Renders a fading "Hello world!" in a {@link LiveCard}.
- */
+import java.util.concurrent.TimeUnit;
+
+
 public class LiveCardRenderer implements DirectRenderingCallback {
 
-    /**
+    private static final String TAG = LiveCardRenderer.class.getSimpleName();
+
+
+/**
+     * The refresh rate, in frames per second, of the view
+     */
+
+    private static final long REFRESH_RATE_FPS= 45;
+
+/**
      * The duration, in millisconds, of one frame.
      */
-    private static final long FRAME_TIME_MILLIS = 40;
 
-    /**
+    private static final long FRAME_TIME_MILLIS = TimeUnit.SECONDS.toMillis(1) / REFRESH_RATE_FPS;
+
+
+/**
      * "Hello world" text size.
      */
+
     private static final float TEXT_SIZE = 70f;
 
-    /**
+
+/**
      * Alpha variation per frame.
      */
+
     private static final int ALPHA_INCREMENT = 5;
 
-    /**
+
+/**
      * Max alpha value.
      */
+
     private static final int MAX_ALPHA = 256;
 
     private final Paint mPaint;
-    private final String mText;
+    //private final String mText;
 
     private int mCenterX;
     private int mCenterY;
 
+    private int mSurfaceWidth;
+    private int mSurfaceHeight;
+
     private SurfaceHolder mHolder;
     private boolean mRenderingPaused;
+
+    //private final FrameLayout mLayout;
+
 
     private RenderThread mRenderThread;
 
@@ -58,7 +82,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
         mPaint.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
         mPaint.setAlpha(0);
 
-        mText = context.getResources().getString(R.string.hello_world);
+        //mText = context.getResources().getString(R.string.hello_world);
     }
 
     @Override
@@ -86,9 +110,11 @@ public class LiveCardRenderer implements DirectRenderingCallback {
         updateRenderingState();
     }
 
-    /**
-     * Starts or stops rendering according to the {@link LiveCard}'s state.
+
+/**
+     * Starts or stops rendering according to the link card's state.
      */
+
     private void updateRenderingState() {
         boolean shouldRender = (mHolder != null) && !mRenderingPaused;
         boolean isRendering = (mRenderThread != null);
@@ -104,9 +130,11 @@ public class LiveCardRenderer implements DirectRenderingCallback {
         }
     }
 
-    /**
+
+/**
      * Draws the view in the SurfaceHolder's canvas.
      */
+
     private void draw() {
         Canvas canvas;
         try {
@@ -120,38 +148,46 @@ public class LiveCardRenderer implements DirectRenderingCallback {
 
             // Update the text alpha and draw the text on the canvas.
             mPaint.setAlpha((mPaint.getAlpha() + ALPHA_INCREMENT) % MAX_ALPHA);
-            canvas.drawText(mText, mCenterX, mCenterY, mPaint);
+            canvas.drawText("This proves dependency on the run method", mCenterX, mCenterY, mPaint);
 
             // Unlock the canvas and post the updates.
             mHolder.unlockCanvasAndPost(canvas);
         }
     }
 
-    /**
+    */
+/**
      * Redraws the {@link View} in the background.
      */
+
     private class RenderThread extends Thread {
         private boolean mShouldRun;
 
-        /**
+        */
+/**
          * Initializes the background rendering thread.
          */
+
         public RenderThread() {
             mShouldRun = true;
         }
 
-        /**
+
+/**
          * Returns true if the rendering thread should continue to run.
          *
          * @return true if the rendering thread should continue to run
          */
+
         private synchronized boolean shouldRun() {
             return mShouldRun;
         }
 
+
         /**
          * Requests that the rendering thread exit at the next opportunity.
          */
+
         public synchronized void quit() {
             mShouldRun = false;
         }
@@ -172,3 +208,4 @@ public class LiveCardRenderer implements DirectRenderingCallback {
     }
 
 }
+

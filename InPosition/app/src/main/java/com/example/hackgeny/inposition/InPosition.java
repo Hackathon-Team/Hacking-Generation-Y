@@ -6,7 +6,10 @@ import com.google.android.glass.timeline.LiveCard.PublishMode;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.location.Location;
 import android.os.IBinder;
+import android.location.Location;
+import android.location.LocationManager;
 
 /**
  * A {@link Service} that publishes a {@link LiveCard} in the timeline.
@@ -14,6 +17,7 @@ import android.os.IBinder;
 public class InPosition extends Service {
 
     private static final String LIVE_CARD_TAG = "InPosition";
+    //private LiveCardRenderer renderer;
 
     private LiveCard mLiveCard;
 
@@ -27,14 +31,19 @@ public class InPosition extends Service {
         if (mLiveCard == null) {
             mLiveCard = new LiveCard(this, LIVE_CARD_TAG);
 
-            LiveCardRenderer renderer = new LiveCardRenderer(this);
-            mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(renderer);
+            //renderer = new LiveCardRenderer(this);
+            //mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(renderer);
 
             // Display the options menu when the live card is tapped.
             Intent menuIntent = new Intent(this, LiveCardMenuActivity.class);
+            menuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
             mLiveCard.attach(this);
-            mLiveCard.publish(PublishMode.REVEAL);
+
+            mLiveCard.publish((intent == null) ? PublishMode.SILENT : PublishMode.REVEAL);
+
+            startActivity(menuIntent);
+
         } else {
             mLiveCard.navigate();
         }
