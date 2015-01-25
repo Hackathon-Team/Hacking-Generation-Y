@@ -68,6 +68,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         mCenterX = width / 2;
         mCenterY = height / 2;
+        updateRenderingState();
     }
 
     @Override
@@ -104,6 +105,33 @@ public class LiveCardRenderer implements DirectRenderingCallback {
                 mRenderThread.quit();
                 mRenderThread = null;
             }
+        }
+    }
+
+    public void updateInformation() {
+        int num = 0;
+        if(orientationManager.hasLocation()) {
+            num = data.closestPlaces(orientationManager.getLocation()).size();
+        }
+
+        mText = num + " Exhibitions Nearby";
+
+        Canvas canvas;
+        try {
+            canvas = mHolder.lockCanvas();
+        } catch (Exception e) {
+            return;
+        }
+        if (canvas != null) {
+            // Clear the canvas.
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+            // Update the text alpha and draw the text on the canvas.
+            mPaint.setAlpha((mPaint.getAlpha() + ALPHA_INCREMENT) % MAX_ALPHA);
+            canvas.drawText(mText, mCenterX, mCenterY, mPaint);
+
+            // Unlock the canvas and post the updates.
+            mHolder.unlockCanvasAndPost(canvas);
         }
     }
 
@@ -149,33 +177,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
                 }
             }
         }
-
-        public void updateInformation() {
-            int num = 0;
-            if(orientationManager.hasLocation()) {
-                num = data.closestPlaces(orientationManager.getLocation()).size();
-            }
-
-            mText = num + " Exhibitions Nearby";
-
-            Canvas canvas;
-            try {
-                canvas = mHolder.lockCanvas();
-            } catch (Exception e) {
-                return;
-            }
-            if (canvas != null) {
-                // Clear the canvas.
-                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-
-                // Update the text alpha and draw the text on the canvas.
-                mPaint.setAlpha((mPaint.getAlpha() + ALPHA_INCREMENT) % MAX_ALPHA);
-                canvas.drawText(mText, mCenterX, mCenterY, mPaint);
-
-                // Unlock the canvas and post the updates.
-                mHolder.unlockCanvasAndPost(canvas);
-            }
-        }
     }
 
 }
+
