@@ -1,6 +1,6 @@
 # InPosition
 
-A Google Glass Application to enhance the museum viewing experience! Created for Hacking Generation Y 2015.
+Our Google Glass application will utilize user location to revolutionize one's experience in museums! Created for Hacking Generation Y 2015.
 
 Check it out on [Devpost](http://devpost.com/software/inposition)!
 
